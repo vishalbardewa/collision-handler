@@ -5,6 +5,7 @@ const classroomController = require('../controllers').classroom;
 const studentController = require('../controllers').student;
 const lecturerController = require('../controllers').lecturer;
 const courseController = require('../controllers').course;
+const slotController = require('../controllers').slot;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -43,5 +44,9 @@ router.delete('/api/course/:id', courseController.delete);
 router.post('/api/student/add_course', studentController.addCourse);
 router.post('/api/classroom/add_with_students', classroomController.addWithStudents);
 router.post('/api/lecturer/add_with_course', lecturerController.addWithCourse);
+
+/* Slot Router */
+router.get('/api/slots', slotController.list);
+router.post('/api/slots', slotController.add);
 
 module.exports = router;
