@@ -10,39 +10,11 @@ module.exports = {
       });
   },
 
-  // select * from "Slots" where weekdays in('Wednesday')
-  // and start_time<='11:30:00'
-  // and start_date<='2021-02-14' and end_date>='2021-02-14'
   async add(req, res) {
     const isSlotFilled = await Slot.findAll({
       where: {
-        [Op.and]: {
-          weekdays: {
-            [Op.in]: [req.body.weekdays],
-          },
-          [Op.or]: {
-            [Op.and]: [
-              {
-                start_date: {
-                  [Op.lte]: req.body.start_date,
-                },
-              },
-              {
-                end_date: {
-                  [Op.gte]: req.body.start_date,
-                },
-              },
-              {
-                start_time: {
-                  [Op.lte]: req.body.start_time,
-                },
-              },
-              {
-                end_time: {
-                  [Op.gte]: req.body.start_time,
-                },
-              },
-            ],
+        [Op.and]: [
+          {
             [Op.and]: [
               {
                 start_date: {
@@ -51,9 +23,18 @@ module.exports = {
               },
               {
                 end_date: {
-                  [Op.gte]: req.body.end_date,
+                  [Op.gte]: req.body.start_date,
                 },
               },
+            ],
+          },
+          {
+            weekdays: {
+              [Op.eq]: req.body.weekdays
+            }
+          },
+          {
+            [Op.and]: [
               {
                 start_time: {
                   [Op.lte]: req.body.end_time,
@@ -61,45 +42,16 @@ module.exports = {
               },
               {
                 end_time: {
-                  [Op.lte]: req.body.end_time,
+                  [Op.gte]: req.body.start_time,
                 },
               },
             ],
-          },
-        },
+          }
+        ]
       },
     });
 
-    // const isPreSlottedFilled = await Slot.findAll({
-    //   where: {
-    //     [Op.and]: [
-    //       {
-    //         start_date: {
-    //           [Op.lte]: req.body.start_date,
-    //         },
-    //       },
-    //       {
-    //         end_date: {
-    //           [Op.gte]: req.body.start_date,
-    //         },
-    //       },
-    //       {
-    //         start_time: {
-    //           [Op.lte]: req.body.start_time,
-    //         },
-    //       },
-    //       {
-    //         end_time: {
-    //           [Op.lte]: req.body.start_time,
-    //         },
-    //       },
-    //     ],
-    //   },
-    // });
-
-    // console.log(isSlotFilled);
-    // console.log(isPreSlottedFilled);
-    // console.log(isSlotFilled[0]._dataValues.start_time >= req.body.start_time && isSlotFilled[0]._previousDataValues.end_time <= req.body.end_time);
+    console.log(isSlotFilled);
     if (!isSlotFilled.length) {
       return Slot.create({
         start_date: req.body.start_date,
@@ -112,9 +64,5 @@ module.exports = {
         .catch((error) => res.status(400).send(error));
     }
     return res.status(409).send('Resource Already Exists');
-    // if(!isSlotFilled)
-    // isSlotFilled.then(() => {
-
-    // }).catch(() => res.status(409).send("Resource Already Exists"))
   },
 };
