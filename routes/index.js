@@ -6,6 +6,7 @@ const studentController = require('../controllers').student;
 const lecturerController = require('../controllers').lecturer;
 const courseController = require('../controllers').course;
 const slotController = require('../controllers').slot;
+const userController = require('../controllers').user;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -48,5 +49,9 @@ router.post('/api/lecturer/add_with_course', lecturerController.addWithCourse);
 /* Slot Router */
 router.get('/api/slots', slotController.list);
 router.post('/api/slots', slotController.add);
+
+/* Slot Router */
+router.get('/api/users', userController.list);
+router.post('/api/users', userController.add);
 
 module.exports = router;
