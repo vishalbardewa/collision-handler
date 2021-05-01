@@ -4,7 +4,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Slot extends Model {
     static associate({ User }) {
-      this.belongsTo(User, { foreignKey: 'id' });
+      this.belongsTo(User, { foreignKey: 'userId' });
     }
   }
   Slot.init(

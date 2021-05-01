@@ -15,6 +15,11 @@ module.exports = {
       where: {
         [Op.and]: [
           {
+            userId: {
+              [Op.eq]: req.body.userId,
+            },
+          },
+          {
             [Op.and]: [
               {
                 start_date: {
@@ -30,8 +35,8 @@ module.exports = {
           },
           {
             weekdays: {
-              [Op.eq]: req.body.weekdays
-            }
+              [Op.eq]: req.body.weekdays,
+            },
           },
           {
             [Op.and]: [
@@ -46,8 +51,8 @@ module.exports = {
                 },
               },
             ],
-          }
-        ]
+          },
+        ],
       },
     });
 
@@ -59,7 +64,7 @@ module.exports = {
         start_time: req.body.start_time,
         end_time: req.body.end_time,
         weekdays: req.body.weekdays,
-        userId: req.body.userId
+        userId: req.body.userId,
       })
         .then((slot) => res.status(201).send(slot))
         .catch((error) => res.status(400).send(error));
